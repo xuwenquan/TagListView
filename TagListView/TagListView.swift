@@ -13,8 +13,35 @@ import UIKit
     @objc optional func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) -> Void
 }
 
+public typealias SelectedIndexDidChangedCallback = (( _ tagView : UIView, _ selectedIndex : Int ) -> Void)
+
+@objc
 @IBDesignable
 open class TagListView: UIView {
+    
+    open var selectedIndexDidChanged : SelectedIndexDidChangedCallback?
+
+    open var selectedIndex : Int = 0 {
+        willSet {
+            self.tagViews[ selectedIndex ].isSelected = false
+        }
+        didSet {
+            self.tagViews[ selectedIndex ].isSelected = true
+            selectedIndexDidChanged?(self.tagBackgroundViews[selectedIndex],selectedIndex)
+        }
+    }
+    
+    @IBInspectable open var multiline : Bool = true
+    
+    @IBInspectable open dynamic var textFontSize: CGFloat = 15  {
+        didSet {
+            textFont = UIFont.systemFont(ofSize: textFontSize)
+            for tagView in tagViews {
+                tagView.textFont = textFont
+            }
+            rearrangeViews()
+        }
+    }
     
     @IBInspectable open dynamic var textColor: UIColor = UIColor.white {
         didSet {
@@ -28,6 +55,14 @@ open class TagListView: UIView {
         didSet {
             for tagView in tagViews {
                 tagView.selectedTextColor = selectedTextColor
+            }
+        }
+    }
+    
+    @IBInspectable open dynamic var highlightedTextColor: UIColor = UIColor.white {
+        didSet {
+            for tagView in tagViews {
+                tagView.highlightedTextColor = highlightedTextColor
             }
         }
     }
@@ -71,6 +106,7 @@ open class TagListView: UIView {
             }
         }
     }
+    
     @IBInspectable open dynamic var borderWidth: CGFloat = 0 {
         didSet {
             for tagView in tagViews {
@@ -122,16 +158,21 @@ open class TagListView: UIView {
         }
     }
     
+   
+    
     @objc public enum Alignment: Int {
         case left
         case center
         case right
     }
+    
+    
     @IBInspectable open var alignment: Alignment = .left {
         didSet {
             rearrangeViews()
         }
     }
+    
     @IBInspectable open dynamic var shadowColor: UIColor = UIColor.white {
         didSet {
             rearrangeViews()
@@ -188,21 +229,15 @@ open class TagListView: UIView {
         }
     }
     
-    @objc open dynamic var textFont: UIFont = UIFont.systemFont(ofSize: 12) {
-        didSet {
-            for tagView in tagViews {
-                tagView.textFont = textFont
-            }
-            rearrangeViews()
-        }
-    }
     
     @IBOutlet open weak var delegate: TagListViewDelegate?
     
+    private var textFont : UIFont = UIFont.systemFont(ofSize: 15)
     open private(set) var tagViews: [TagView] = []
     private(set) var tagBackgroundViews: [UIView] = []
     private(set) var rowViews: [UIView] = []
     private(set) var tagViewHeight: CGFloat = 0
+    open private(set) var contentWidths : [CGFloat] = []
     private(set) var rows = 0 {
         didSet {
             invalidateIntrinsicContentSize()
@@ -215,6 +250,7 @@ open class TagListView: UIView {
         addTag("Welcome")
         addTag("to")
         addTag("TagListView").isSelected = true
+        addTag("more")
     }
     
     // MARK: - Layout
@@ -231,7 +267,8 @@ open class TagListView: UIView {
             view.removeFromSuperview()
         }
         rowViews.removeAll(keepingCapacity: true)
-        
+
+        contentWidths = []
         var currentRow = 0
         var currentRowView: UIView!
         var currentRowTagCount = 0
@@ -240,7 +277,19 @@ open class TagListView: UIView {
             tagView.frame.size = tagView.intrinsicContentSize
             tagViewHeight = tagView.frame.height
             
-            if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > frame.width {
+            var shouldStartNewLine = false
+            if multiline {
+                if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > frame.width {
+                    shouldStartNewLine = true
+                }
+            }
+            else{
+                if currentRowTagCount == 0 {
+                    shouldStartNewLine = true
+                }
+            }
+            
+            if shouldStartNewLine {
                 currentRow += 1
                 currentRowWidth = 0
                 currentRowTagCount = 0
@@ -250,7 +299,8 @@ open class TagListView: UIView {
                 rowViews.append(currentRowView)
                 addSubview(currentRowView)
 
-                tagView.frame.size.width = min(tagView.frame.size.width, frame.width)
+                // this line should a bug in single lines tags
+                //tagView.frame.size.width = min(tagView.frame.size.width, frame.width)
             }
             
             let tagBackgroundView = tagBackgroundViews[index]
@@ -266,6 +316,12 @@ open class TagListView: UIView {
             
             currentRowTagCount += 1
             currentRowWidth += tagView.frame.width + marginX
+            if contentWidths.count < currentRow {
+                contentWidths.append(currentRowWidth)
+            }
+            else{
+                contentWidths [ currentRow - 1 ] = currentRowWidth
+            }
             
             switch alignment {
             case .left:
@@ -286,17 +342,31 @@ open class TagListView: UIView {
     // MARK: - Manage tags
     
     override open var intrinsicContentSize: CGSize {
-        var height = CGFloat(rows) * (tagViewHeight + marginY)
-        if rows > 0 {
-            height -= marginY
+        if multiline {
+            var height = CGFloat(rows) * (tagViewHeight + marginY)
+            if rows > 0 {
+                height -= marginY
+            }
+            return CGSize(width: frame.width, height: height)
         }
-        return CGSize(width: frame.width, height: height)
+        else{
+            if rows == 0 {
+                return CGSize( width: 0 , height : 0 )
+            }
+            else{
+                let height : CGFloat = CGFloat(rows) * (tagViewHeight + marginY) - marginY
+                let width = contentWidths.last! - marginX
+                //print("taglistView intrinsicContents \(width)")
+                return CGSize( width: width , height : height )
+            }
+        }
     }
     
     private func createNewTagView(_ title: String) -> TagView {
         let tagView = TagView(title: title)
         
         tagView.textColor = textColor
+        tagView.highlightedTextColor = highlightedTextColor
         tagView.selectedTextColor = selectedTextColor
         tagView.tagBackgroundColor = tagBackgroundColor
         tagView.highlightedBackgroundColor = tagHighlightedBackgroundColor
@@ -317,10 +387,18 @@ open class TagListView: UIView {
         tagView.removeButton.addTarget(self, action: #selector(removeButtonPressed(_:)), for: .touchUpInside)
         
         // On long press, deselect all tags except this one
-        tagView.onLongPress = { [unowned self] this in
-            for tag in self.tagViews {
-                tag.isSelected = (tag == this)
+//        tagView.onLongPress = { [unowned self] this in
+//            for tag in self.tagViews {
+//                tag.isSelected = (tag == this)
+//            }
+//        }
+        
+        tagView.onTap = { [unowned self] this in
+            
+            if let idx = self.tagViews.index(of: this) {
+                self.selectedIndex = idx
             }
+
         }
         
         return tagView
@@ -331,6 +409,7 @@ open class TagListView: UIView {
         return addTagView(createNewTagView(title))
     }
     
+    @objc
     @discardableResult
     open func addTags(_ titles: [String]) -> [TagView] {
         var tagViews: [TagView] = []

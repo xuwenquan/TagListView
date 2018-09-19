@@ -13,6 +13,7 @@ class ViewController: UIViewController, TagListViewDelegate {
     @IBOutlet weak var tagListView: TagListView!
     @IBOutlet weak var biggerTagListView: TagListView!
     @IBOutlet weak var biggestTagListView: TagListView!
+    @IBOutlet weak var segmentListView: SegmentListView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +38,7 @@ class ViewController: UIViewController, TagListViewDelegate {
         tagListView.insertTag("This should be the third tag", at: 2)
         
         biggerTagListView.delegate = self
-        biggerTagListView.textFont = UIFont.systemFont(ofSize: 15)
+        biggerTagListView.textFontSize = 15
         biggerTagListView.shadowRadius = 2
         biggerTagListView.shadowOpacity = 0.4
         biggerTagListView.shadowColor = UIColor.black
@@ -48,10 +49,12 @@ class ViewController: UIViewController, TagListViewDelegate {
         biggerTagListView.alignment = .center
         
         biggestTagListView.delegate = self
-        biggestTagListView.textFont = UIFont.systemFont(ofSize: 24)
+        biggestTagListView.textFontSize = 24
         // it is also possible to add all tags in one go
         biggestTagListView.addTags(["all", "your", "tag", "are", "belong", "to", "us"])
         biggestTagListView.alignment = .right
+        
+        segmentListView.addTags(["all", "your", "tag", "are", "belong", "to", "us"])
         
     }
     

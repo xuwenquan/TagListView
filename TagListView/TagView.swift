@@ -34,6 +34,13 @@ open class TagView: UIButton {
             reloadStyles()
         }
     }
+    
+    @IBInspectable open var highlightedTextColor: UIColor = UIColor.white {
+        didSet {
+            self.setTitleColor(highlightedTextColor, for:.highlighted)
+        }
+    }
+    
     @IBInspectable open var selectedTextColor: UIColor = UIColor.white {
         didSet {
             reloadStyles()
@@ -81,7 +88,7 @@ open class TagView: UIButton {
         }
     }
     
-    @IBInspectable open var textFont: UIFont = UIFont.systemFont(ofSize: 12) {
+    @IBInspectable open var textFont: UIFont = UIFont.systemFont(ofSize: 15) {
         didSet {
             titleLabel?.font = textFont
         }
