@@ -13,21 +13,27 @@ import UIKit
     @objc optional func tagRemoveButtonPressed(_ title: String, tagView: TagView, sender: TagListView) -> Void
 }
 
-public typealias SelectedIndexDidChangedCallback = (( _ tagView : UIView, _ selectedIndex : Int ) -> Void)
+public typealias SelectedIndexDidChangedCallback = ((_ oldIndex : Int , _ newIndex : Int ) -> Void)
 
 @objc
 @IBDesignable
 open class TagListView: UIView {
-    
+
+    open var selectedIndexWillChanged : SelectedIndexDidChangedCallback?
     open var selectedIndexDidChanged : SelectedIndexDidChangedCallback?
 
     open var selectedIndex : Int = 0 {
         willSet {
-            self.tagViews[ selectedIndex ].isSelected = false
+            if  selectedIndex < self.tagViews.count {
+                self.tagViews[ selectedIndex ].isSelected = false
+                selectedIndexWillChanged?(selectedIndex,newValue)
+            }
         }
         didSet {
-            self.tagViews[ selectedIndex ].isSelected = true
-            selectedIndexDidChanged?(self.tagBackgroundViews[selectedIndex],selectedIndex)
+            if selectedIndex < self.tagViews.count {
+                self.tagViews[ selectedIndex ].isSelected = true
+                selectedIndexDidChanged?(oldValue,selectedIndex)
+            }
         }
     }
     

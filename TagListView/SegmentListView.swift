@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public typealias SegmentListViewSelectedIndexChangedCallback = ( ( _ selectedInex:Int) -> Void )
+public typealias SegmentListViewSelectedIndexChangedCallback = ( ( _ oldIndex: Int , _ newIndex: Int ) -> Void )
 
 @objc
 @IBDesignable
@@ -32,13 +32,20 @@ open class SegmentListView: UIScrollView {
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
         taglistView.multiline = false
-        taglistView.selectedIndexDidChanged = { [weak self] tagview,segmentIndex in
+        taglistView.selectedIndexWillChanged = { [weak self] oldIndex,newIndex in
             if let this = self {
+                this.selectedIndexWillChanged?(oldIndex,newIndex)
+            }
+            
+        }
+        taglistView.selectedIndexDidChanged = { [weak self] oldIndex,newIndex in
+            if let this = self {
+                let tagview = this.taglistView.tagViews[newIndex]
                 let left = max( 0 , tagview.frame.origin.x - (this.bounds.size.width-tagview.bounds.size.width) / 2)
                 let width = min( this.taglistView.intrinsicContentSize.width , left + this.bounds.size.width )
                 let rect = CGRect.init(x: left , y: 0, width: width , height: this.bounds.height )
                 this.scrollRectToVisible( rect, animated: true )                
-                this.selectedIndexDidChanged?(segmentIndex)
+                this.selectedIndexDidChanged?(oldIndex,newIndex)
             }
         }
         super.addSubview(taglistView)
@@ -69,6 +76,10 @@ open class SegmentListView: UIScrollView {
         taglistView.addTag("more")
     }
     
+    @objc open func clear(){
+        taglistView.removeAllTags();
+    }
+    
     @objc open var selectedIndex : Int {
         get {
             return taglistView.selectedIndex
@@ -78,6 +89,7 @@ open class SegmentListView: UIScrollView {
         }
     }
     
+    @objc open var selectedIndexWillChanged : SegmentListViewSelectedIndexChangedCallback?
     @objc open var selectedIndexDidChanged : SegmentListViewSelectedIndexChangedCallback?
     
     @objc
