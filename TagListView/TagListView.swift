@@ -26,18 +26,20 @@ open class TagListView: UIView {
         willSet {
             if  selectedIndex < self.tagViews.count {
                 self.tagViews[ selectedIndex ].isSelected = false
+                self.tagBackgroundViews[ selectedIndex ].isSelected = false
                 selectedIndexWillChanged?(selectedIndex,newValue)
             }
         }
         didSet {
             if selectedIndex < self.tagViews.count {
                 self.tagViews[ selectedIndex ].isSelected = true
+                self.tagBackgroundViews[ selectedIndex ].isSelected = true
                 selectedIndexDidChanged?(oldValue,selectedIndex)
             }
         }
     }
     
-    @IBInspectable open var multiline : Bool = true
+    @IBInspectable open dynamic var multiline : Bool = true
     
     @IBInspectable open dynamic var textFontSize: CGFloat = 15  {
         didSet {
@@ -85,6 +87,14 @@ open class TagListView: UIView {
         didSet {
             for tagView in tagViews {
                 tagView.tagBackgroundColor = tagBackgroundColor
+            }
+        }
+    }
+    
+    @IBInspectable open dynamic var tagViewUnderlineColor : UIColor = UIColor.clear {
+        didSet {
+            for tagView in tagViews {
+                tagView.underlineViewColor = tagViewUnderlineColor
             }
         }
     }
@@ -240,7 +250,7 @@ open class TagListView: UIView {
     
     private var textFont : UIFont = UIFont.systemFont(ofSize: 15)
     open private(set) var tagViews: [TagView] = []
-    private(set) var tagBackgroundViews: [UIView] = []
+    private(set) var tagBackgroundViews: [TagBackgroundView] = []
     private(set) var rowViews: [UIView] = []
     private(set) var tagViewHeight: CGFloat = 0
     open private(set) var contentWidths : [CGFloat] = []
@@ -268,9 +278,14 @@ open class TagListView: UIView {
     }
     
     private func rearrangeViews() {
-        let views = tagViews as [UIView] + tagBackgroundViews + rowViews
-        for view in views {
-            view.removeFromSuperview()
+        tagViews.forEach { (tagView) in
+            tagView.removeFromSuperview()
+        }
+        tagBackgroundViews.forEach { (bgView) in
+            bgView.removeFromSuperview()
+        }
+        rowViews.forEach { (v) in
+            v.removeFromSuperview()
         }
         rowViews.removeAll(keepingCapacity: true)
 
@@ -391,7 +406,7 @@ open class TagListView: UIView {
         tagView.removeIconLineColor = removeIconLineColor
         tagView.addTarget(self, action: #selector(tagPressed(_:)), for: .touchUpInside)
         tagView.removeButton.addTarget(self, action: #selector(removeButtonPressed(_:)), for: .touchUpInside)
-        
+        tagView.underlineViewColor = self.tagViewUnderlineColor
         // On long press, deselect all tags except this one
 //        tagView.onLongPress = { [unowned self] this in
 //            for tag in self.tagViews {
@@ -429,7 +444,7 @@ open class TagListView: UIView {
     open func addTagViews(_ tagViews: [TagView]) -> [TagView] {
         for tagView in tagViews {
             self.tagViews.append(tagView)
-            tagBackgroundViews.append(UIView(frame: tagView.bounds))
+            tagBackgroundViews.append(TagBackgroundView(frame: tagView.bounds))
         }
         rearrangeViews()
         return tagViews
@@ -443,7 +458,7 @@ open class TagListView: UIView {
     @discardableResult
     open func addTagView(_ tagView: TagView) -> TagView {
         tagViews.append(tagView)
-        tagBackgroundViews.append(UIView(frame: tagView.bounds))
+        tagBackgroundViews.append(TagBackgroundView(frame: tagView.bounds))
         rearrangeViews()
         
         return tagView
@@ -452,7 +467,7 @@ open class TagListView: UIView {
     @discardableResult
     open func insertTagView(_ tagView: TagView, at index: Int) -> TagView {
         tagViews.insert(tagView, at: index)
-        tagBackgroundViews.insert(UIView(frame: tagView.bounds), at: index)
+        tagBackgroundViews.insert(TagBackgroundView(frame: tagView.bounds), at: index)
         rearrangeViews()
         
         return tagView
@@ -483,8 +498,10 @@ open class TagListView: UIView {
     }
     
     open func removeAllTags() {
-        let views = tagViews as [UIView] + tagBackgroundViews
-        for view in views {
+        for view in tagViews {
+            view.removeFromSuperview()
+        }
+        for view in tagBackgroundViews {
             view.removeFromSuperview()
         }
         tagViews = []

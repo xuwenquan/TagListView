@@ -10,6 +10,21 @@ import UIKit
 
 @IBDesignable
 open class TagView: UIButton {
+    var underlineView : UIView!
+    
+    private func addUnderlineView () {
+        self.underlineView = UIView.init(frame: CGRect.init(x: 0, y: frame.maxY - 3 , width: frame.width, height: 3))
+        self.underlineView.isUserInteractionEnabled = false
+        self.underlineView.backgroundColor = underlineViewColor
+        self.addSubview(self.underlineView)
+    }
+    
+    
+    @IBInspectable public var underlineViewColor : UIColor = UIColor.clear {
+        didSet {
+            self.underlineView.backgroundColor = underlineViewColor
+        }
+    }
 
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
@@ -101,16 +116,19 @@ open class TagView: UIButton {
                 // Instead, we keep the current color.
                 backgroundColor = highlightedBackgroundColor
             }
+            self.underlineView.isHidden = false
         }
         else if isSelected {
             backgroundColor = selectedBackgroundColor ?? tagBackgroundColor
             layer.borderColor = selectedBorderColor?.cgColor ?? borderColor?.cgColor
             setTitleColor(selectedTextColor, for: UIControl.State())
+            self.underlineView.isHidden = false
         }
         else {
             backgroundColor = tagBackgroundColor
             layer.borderColor = borderColor?.cgColor
             setTitleColor(textColor, for: UIControl.State())
+            self.underlineView.isHidden = true
         }
     }
     
@@ -175,6 +193,8 @@ open class TagView: UIButton {
     }
     
     private func setupView() {
+        self.addUnderlineView()
+        
         titleLabel?.lineBreakMode = titleLineBreakMode
 
         frame.size = intrinsicContentSize
@@ -183,6 +203,7 @@ open class TagView: UIButton {
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longPress))
         self.addGestureRecognizer(longPress)
+
     }
     
     @objc func longPress() {
@@ -221,6 +242,8 @@ open class TagView: UIButton {
             removeButton.frame.size.height = self.frame.height
             removeButton.frame.origin.y = 0
         }
+        self.underlineView.frame = CGRect.init(x: 0, y: frame.maxY - 3 , width: frame.width, height: 3)
+
     }
 }
 

@@ -72,8 +72,10 @@ open class SegmentListView: UIScrollView {
     open override func prepareForInterfaceBuilder() {
         taglistView.addTag("Welcome")
         taglistView.addTag("to")
-        taglistView.addTag("SegmentListView").isSelected = true
+        taglistView.addTag("SegmentListView")
         taglistView.addTag("more")
+        taglistView.tagViewUnderlineColor = UIColor.red
+        taglistView.selectedIndex = 1;
     }
     
     @objc open func clear(){
@@ -96,6 +98,7 @@ open class SegmentListView: UIScrollView {
     open func addTags(_ titles: [String]){
         taglistView.addTags(titles)
     }
+    
     
     @IBInspectable open dynamic var textFontSize: CGFloat = 15  {
         didSet {
@@ -163,6 +166,12 @@ open class SegmentListView: UIScrollView {
     @IBInspectable open dynamic var cornerRadius: CGFloat = 0 {
         didSet {
             taglistView.cornerRadius = cornerRadius
+        }
+    }
+    
+    @objc @IBInspectable open dynamic var underlineColor : UIColor = .red {
+        didSet {
+            taglistView.tagViewUnderlineColor = underlineColor
         }
     }
     
