@@ -13,16 +13,17 @@ import UIKit
 import TagListView
 
 class MySpec: QuickSpec {
+    let recording = false
+
     override func spec() {
         describe("underline color") {
             it("has valid snapshot") {
-                let recording = false
                 
                 let segmentListView = SegmentListView.init(frame:CGRect.init(x: 0, y: 0, width: 150, height: 50))
                 segmentListView.addTags(["one","two","three"])
                 segmentListView.selectedIndex = 1
                 
-                if recording == true {
+                if self.recording == true {
                     expect(segmentListView).to( recordSnapshot(named:"underline_blue")  )
                 }
                 else {
@@ -30,7 +31,7 @@ class MySpec: QuickSpec {
                 }
                 
                 segmentListView.underlineColor = UIColor.yellow
-                if recording == true {
+                if self.recording == true {
                    expect(segmentListView).to( recordSnapshot(named:"underline_yellow")  )
                 }
                 else{
@@ -38,7 +39,7 @@ class MySpec: QuickSpec {
                 }
                 
                 segmentListView.selectedIndex = 0
-                if recording == true {
+                if self.recording == true {
                     expect(segmentListView).to( recordSnapshot(named:"underline_0")  )
                 }
                 else{
@@ -48,11 +49,25 @@ class MySpec: QuickSpec {
                 segmentListView.clear()
                 segmentListView.addTags(["five","six","seven"])
                 segmentListView.selectedIndex = 0
-                if recording == true {
+                if self.recording == true {
                     expect(segmentListView).to( recordSnapshot(named:"underline_change_tags")  )
                 }
                 else{
                     expect(segmentListView).to( haveValidSnapshot(named:"underline_change_tags") )
+                }
+                
+            }
+            
+            it("has many tags cannot fit width") {
+                let segmentListView = SegmentListView.init(frame:CGRect.init(x: 0, y: 0, width: 150, height: 50))
+                segmentListView.addTags(["one","two","three","four","five","six","seven"])
+                segmentListView.selectedIndex = 1
+                
+                if self.recording == true {
+                    expect(segmentListView).to( recordSnapshot(named:"underline_cannot_fit_width")  )
+                }
+                else {
+                    expect(segmentListView).to( haveValidSnapshot(named:"underline_cannot_fit_width") )
                 }
                 
             }
