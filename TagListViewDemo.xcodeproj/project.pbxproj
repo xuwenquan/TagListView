@@ -24,7 +24,6 @@
 		378892242161FF32009F3190 /* TagBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378892232161FF32009F3190 /* TagBackgroundView.swift */; };
 		378892252162002F009F3190 /* TagBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378892232161FF32009F3190 /* TagBackgroundView.swift */; };
 		37D8F56A214F9DD30026525C /* SegmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D8F569214F9DD30026525C /* SegmentListView.swift */; };
-		5C479F4179B4F8F0832FDC11 /* Pods_TagListViewTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73E7FADD99F1E147040766B /* Pods_TagListViewTests.framework */; };
 		90A878531BA1EBA1001C8989 /* TagListView.h in Headers */ = {isa = PBXBuildFile; fileRef = 90A878521BA1EBA1001C8989 /* TagListView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FFBD46391C6E1AA60045684A /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD46381C6E1AA60045684A /* CloseButton.swift */; };
 		FFBD463A1C6E1AB50045684A /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD46381C6E1AA60045684A /* CloseButton.swift */; };
@@ -86,9 +85,6 @@
 		378892232161FF32009F3190 /* TagBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TagBackgroundView.swift; path = TagListView/TagBackgroundView.swift; sourceTree = SOURCE_ROOT; };
 		37D8F569214F9DD30026525C /* SegmentListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentListView.swift; path = TagListView/SegmentListView.swift; sourceTree = SOURCE_ROOT; };
 		90A878521BA1EBA1001C8989 /* TagListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagListView.h; sourceTree = "<group>"; };
-		A6E0C13EA44E56C0DBAA75FA /* Pods-TagListViewTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagListViewTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TagListViewTests/Pods-TagListViewTests.release.xcconfig"; sourceTree = "<group>"; };
-		B5A4A386EA986565FBCE7E62 /* Pods-TagListViewTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagListViewTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TagListViewTests/Pods-TagListViewTests.debug.xcconfig"; sourceTree = "<group>"; };
-		F73E7FADD99F1E147040766B /* Pods_TagListViewTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TagListViewTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFBD46381C6E1AA60045684A /* CloseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloseButton.swift; path = ../TagListView/CloseButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,7 +109,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				375BD96E216219550038D519 /* TagListView.framework in Frameworks */,
-				5C479F4179B4F8F0832FDC11 /* Pods_TagListViewTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,8 +122,6 @@
 				1AD176F51B6D73E70081F615 /* TagListView */,
 				375BD96A216219550038D519 /* TagListViewTests */,
 				1A6076BA1AFED303009EA00E /* Products */,
-				B71C688C10DF9DBEF507CA14 /* Pods */,
-				6C6F9CD90E8327AB0826AEEC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -202,23 +195,6 @@
 			path = TagListViewTests;
 			sourceTree = "<group>";
 		};
-		6C6F9CD90E8327AB0826AEEC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F73E7FADD99F1E147040766B /* Pods_TagListViewTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		B71C688C10DF9DBEF507CA14 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B5A4A386EA986565FBCE7E62 /* Pods-TagListViewTests.debug.xcconfig */,
-				A6E0C13EA44E56C0DBAA75FA /* Pods-TagListViewTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -274,11 +250,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 375BD971216219550038D519 /* Build configuration list for PBXNativeTarget "TagListViewTests" */;
 			buildPhases = (
-				751FDC609A1DB43E11457821 /* [CP] Check Pods Manifest.lock */,
 				375BD965216219550038D519 /* Sources */,
 				375BD966216219550038D519 /* Frameworks */,
 				375BD967216219550038D519 /* Resources */,
-				C9AED32E0C8A6BD03BFB07E0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -363,59 +337,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		751FDC609A1DB43E11457821 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TagListViewTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C9AED32E0C8A6BD03BFB07E0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TagListViewTests/Pods-TagListViewTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble-Snapshots/Nimble_Snapshots.framework",
-				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
-				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble_Snapshots.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TagListViewTests/Pods-TagListViewTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1A6076B51AFED303009EA00E /* Sources */ = {
@@ -680,7 +601,6 @@
 		};
 		375BD972216219550038D519 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B5A4A386EA986565FBCE7E62 /* Pods-TagListViewTests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -708,7 +628,6 @@
 		};
 		375BD973216219550038D519 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6E0C13EA44E56C0DBAA75FA /* Pods-TagListViewTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
